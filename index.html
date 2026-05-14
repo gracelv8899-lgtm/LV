@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>小红书爆文跟进工具</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main class="container">
+    <h1>小红书爆文跟进工具</h1>
+    <p class="muted">简版：记录爆文、按优先级/阶段筛选、导出 CSV。</p>
+
+    <section class="card">
+      <h2>今日爆文逻辑（每日复用）</h2>
+      <p id="today"></p>
+      <ul>
+        <li>优先找「点赞+收藏+评论」总互动高的内容，目标先看总互动 ≥ 1000。</li>
+        <li>优先筛「粉丝 ≤ 1000」账号，验证普通账号也能出爆文的可复制逻辑。</li>
+        <li>优先看有评论区互动的笔记，提取真实痛点词、质疑词、购买意向词。</li>
+        <li>记录结构：标题钩子 → 封面信息差 → 正文框架 → 评论引导 → 转化动作。</li>
+      </ul>
+    </section>
+
+    <section class="card">
+      <h2>新增爆文记录</h2>
+      <form id="record-form">
+        <div class="grid">
+          <label>标题
+            <input name="title" required />
+          </label>
+          <label>链接
+            <input name="url" placeholder="https://" />
+          </label>
+          <label>作者粉丝数
+            <input name="followers" type="number" min="0" required />
+          </label>
+          <label>点赞
+            <input name="likes" type="number" min="0" required />
+          </label>
+          <label>收藏
+            <input name="favorites" type="number" min="0" required />
+          </label>
+          <label>评论
+            <input name="comments" type="number" min="0" required />
+          </label>
+          <label>优先级
+            <select name="priority">
+              <option value="高">高</option>
+              <option value="中" selected>中</option>
+              <option value="低">低</option>
+            </select>
+          </label>
+          <label>阶段
+            <select name="stage">
+              <option value="待分析">待分析</option>
+              <option value="已拆解">已拆解</option>
+              <option value="已复刻">已复刻</option>
+              <option value="已复盘">已复盘</option>
+            </select>
+          </label>
+        </div>
+        <label>爆文逻辑备注
+          <textarea name="logic" rows="3" placeholder="如：3秒反差开头 + 数据背书 + 评论区提问"></textarea>
+        </label>
+        <button type="submit">新增记录</button>
+      </form>
+    </section>
+
+    <section class="card">
+      <h2>筛选</h2>
+      <div class="filters">
+        <label>优先级
+          <select id="filter-priority">
+            <option value="全部">全部</option>
+            <option value="高">高</option>
+            <option value="中">中</option>
+            <option value="低">低</option>
+          </select>
+        </label>
+        <label>阶段
+          <select id="filter-stage">
+            <option value="全部">全部</option>
+            <option value="待分析">待分析</option>
+            <option value="已拆解">已拆解</option>
+            <option value="已复刻">已复刻</option>
+            <option value="已复盘">已复盘</option>
+          </select>
+        </label>
+        <label>
+          <input id="filter-hot" type="checkbox" /> 只看互动总和 ≥ 1000
+        </label>
+        <label>
+          <input id="filter-small" type="checkbox" /> 只看粉丝 ≤ 1000
+        </label>
+        <label>
+          <input id="filter-commented" type="checkbox" /> 只看有评论（评论 > 0）
+        </label>
+      </div>
+      <button id="export-btn" type="button">导出 CSV</button>
+    </section>
+
+    <section class="card">
+      <h2>记录列表</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>日期</th>
+            <th>标题</th>
+            <th>粉丝</th>
+            <th>点赞</th>
+            <th>收藏</th>
+            <th>评论</th>
+            <th>总互动</th>
+            <th>优先级</th>
+            <th>阶段</th>
+          </tr>
+        </thead>
+        <tbody id="records-body"></tbody>
+      </table>
+      <p class="muted">数据保存在浏览器本地（localStorage）。</p>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
